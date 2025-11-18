@@ -24903,24 +24903,49 @@
 
         // API Base URL - For APK, use production server
         function getAPIBase() {
-            // For APK/Cordova app, always use production server
-            if (window.cordova || window.location.protocol === 'file:') {
+            // Check if running as file:// protocol (APK/Cordova)
+            if (window.location.protocol === 'file:') {
+                console.log('🔍 Detected file:// protocol - Using production server');
                 return 'https://eduspherebysarvesh.onrender.com';
             }
             
-            // For web version on localhost, use localhost
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                return window.location.origin;
+            // Check if Cordova is available
+            if (window.cordova) {
+                console.log('🔍 Detected Cordova - Using production server');
+                return 'https://eduspherebysarvesh.onrender.com';
+            }
+            
+            // Check if hostname is empty or localhost-like (APK fallback)
+            if (!window.location.hostname || window.location.hostname === '' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                // If protocol is not http/https, assume APK
+                if (!window.location.protocol.startsWith('http')) {
+                    console.log('🔍 No hostname + non-http protocol - Using production server');
+                    return 'https://eduspherebysarvesh.onrender.com';
+                }
+                // Otherwise it's localhost web
+                return window.location.origin || 'http://localhost:3000';
             }
             
             // For web version on production, use current origin
+            console.log('🔍 Using current origin:', window.location.origin);
             return window.location.origin;
         }
-        const API_BASE = getAPIBase();
+        
+        // Initialize API_BASE
+        let API_BASE = getAPIBase();
         
         console.log('🌐 API Base URL:', API_BASE);
         console.log('📱 Is Cordova:', !!window.cordova);
         console.log('📄 Protocol:', window.location.protocol);
+        console.log('🏠 Hostname:', window.location.hostname);
+        console.log('🌍 Origin:', window.location.origin);
+        
+        // Re-check after Cordova is ready (if in Cordova environment)
+        document.addEventListener('deviceready', function() {
+            console.log('📱 Cordova deviceready event fired');
+            API_BASE = 'https://eduspherebysarvesh.onrender.com';
+            console.log('🔄 Updated API_BASE to:', API_BASE);
+        }, false);
 
         // Test LaTeX dropdown functionality
         function testLatexDropdown() {
