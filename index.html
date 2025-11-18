@@ -24901,51 +24901,16 @@
         let createdPapers = [];
         let selectedPaperQuestions = [];
 
-        // API Base URL - For APK, use production server
-        function getAPIBase() {
-            // Check if running as file:// protocol (APK/Cordova)
-            if (window.location.protocol === 'file:') {
-                console.log('🔍 Detected file:// protocol - Using production server');
-                return 'https://eduspherebysarvesh.onrender.com';
-            }
-            
-            // Check if Cordova is available
-            if (window.cordova) {
-                console.log('🔍 Detected Cordova - Using production server');
-                return 'https://eduspherebysarvesh.onrender.com';
-            }
-            
-            // Check if hostname is empty or localhost-like (APK fallback)
-            if (!window.location.hostname || window.location.hostname === '' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                // If protocol is not http/https, assume APK
-                if (!window.location.protocol.startsWith('http')) {
-                    console.log('🔍 No hostname + non-http protocol - Using production server');
-                    return 'https://eduspherebysarvesh.onrender.com';
-                }
-                // Otherwise it's localhost web
-                return window.location.origin || 'http://localhost:3000';
-            }
-            
-            // For web version on production, use current origin
-            console.log('🔍 Using current origin:', window.location.origin);
-            return window.location.origin;
-        }
+        // API Base URL - HARDCODED FOR APK
+        // This file is specifically for APK, so always use production server
+        const API_BASE = 'https://eduspherebysarvesh.onrender.com';
         
-        // Initialize API_BASE
-        let API_BASE = getAPIBase();
-        
-        console.log('🌐 API Base URL:', API_BASE);
+        console.log('🌐 API Base URL (HARDCODED FOR APK):', API_BASE);
         console.log('📱 Is Cordova:', !!window.cordova);
         console.log('📄 Protocol:', window.location.protocol);
         console.log('🏠 Hostname:', window.location.hostname);
         console.log('🌍 Origin:', window.location.origin);
-        
-        // Re-check after Cordova is ready (if in Cordova environment)
-        document.addEventListener('deviceready', function() {
-            console.log('📱 Cordova deviceready event fired');
-            API_BASE = 'https://eduspherebysarvesh.onrender.com';
-            console.log('🔄 Updated API_BASE to:', API_BASE);
-        }, false);
+        console.log('⚠️ This is the APK version - API_BASE is hardcoded to production server');
 
         // Test LaTeX dropdown functionality
         function testLatexDropdown() {
