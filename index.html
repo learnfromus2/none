@@ -30270,7 +30270,7 @@
                 `;
 
                 // Fetch questions from the server with language filter
-                let apiUrl = `/api/questions?examType=${examType}&subject=${subject}`;
+                let apiUrl = `${API_BASE}/api/questions?examType=${examType}&subject=${subject}`;
                 if (currentLanguage && currentLanguage !== 'all') {
                     apiUrl += `&language=${currentLanguage}`;
                 }
@@ -31515,7 +31515,7 @@
             try {
                 resultBox.innerHTML = `<div style="text-align:center; padding:1rem;"><i class="fas fa-spinner fa-spin"></i> Generating study guidance...</div>`;
 
-                const response = await fetch("/api/ai-guidance", {
+                const response = await fetch(`${API_BASE}/api/ai-guidance`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -31783,7 +31783,7 @@
             console.log('📎 Ultra: Files count:', messageData.files?.length || 0);
             console.log('📎 Ultra: Message text:', messageData.text);
             try {
-                const response = await fetch('/api/ai-guidance', {
+                const response = await fetch(`${API_BASE}/api/ai-guidance`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -33991,7 +33991,7 @@
                     preferredProvider: selectedProvider !== 'auto' ? selectedProvider : undefined
                 });
 
-                const response = await fetch("/api/ai-guidance", {
+                const response = await fetch(`${API_BASE}/api/ai-guidance`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -36647,7 +36647,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
         // Extract questions from image using AI
         async function extractQuestionsFromImage(base64Image, fileName) {
             try {
-                const response = await fetch('/api/ai-guidance', {
+                const response = await fetch(`${API_BASE}/api/ai-guidance`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -43879,7 +43879,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
 
             try {
                 // Send to AI with file data
-                const response = await fetch('/api/ai-guidance', {
+                const response = await fetch(`${API_BASE}/api/ai-guidance`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -47158,7 +47158,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             
             try {
                 const token = localStorage.getItem('token');
-                const url = docId ? `/api/embedded-documents/${docId}` : '/api/embedded-documents';
+                const url = docId ? `${API_BASE}/api/embedded-documents/${docId}` : '/api/embedded-documents';
                 const method = docId ? 'PUT' : 'POST';
                 
                 const response = await fetch(url, {
