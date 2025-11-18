@@ -28187,7 +28187,7 @@
         // Load personal tests (only for current user)
         async function loadPersonalTests() {
             try {
-                const response = await fetch('${API_BASE}/api/practice-tests/my-tests', {
+                const response = await fetch(`${API_BASE}/api/practice-tests/my-tests`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -39499,7 +39499,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
                 `;
 
                 console.log('🌐 Fetching mock tests from /api/mock-tests...');
-                console.log('🌐 API URL:', '${API_BASE}/api/mock-tests');
+                console.log('🌐 API URL:', `${API_BASE}/api/mock-tests`);
                 
                 fetch(`${API_BASE}/api/mock-tests`)
                     .then(response => {
