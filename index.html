@@ -1149,7 +1149,7 @@
         // Alternative: Server-side PDF generation (FASTEST + BEST QUALITY)
         async function generateServerPDF(htmlContent, filename) {
             try {
-                const response = await fetch('/api/generate-pdf', {
+                const response = await fetch(`${API_BASE}/api/generate-pdf`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -26929,7 +26929,7 @@
             
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/chapters', {
+                const response = await fetch(`${API_BASE}/api/chapters`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await response.json();
@@ -26989,7 +26989,7 @@
             try {
                 console.log(`📚 Loading chapters for ${subject} (${examType})...`);
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/chapters', {
+                const response = await fetch(`${API_BASE}/api/chapters`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await response.json();
@@ -27041,7 +27041,7 @@
             try {
                 console.log(`📚 Loading chapters for edit form: ${subject} (${examType})...`);
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/chapters', {
+                const response = await fetch(`${API_BASE}/api/chapters`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await response.json();
@@ -27081,7 +27081,7 @@
                 console.log(`📚 Loading chapters for examType="${validExamType}" subject="${validSubject}"`);
                 
                 // Build URL with proper encoding
-                const baseUrl = '/api/chapters';
+                const baseUrl = `${API_BASE}/api/chapters`;
                 const params = new URLSearchParams({
                     examType: validExamType,
                     subject: validSubject
@@ -27247,7 +27247,7 @@
             try {
                 console.log(`📚 Loading chapters for enhanced form: ${subject}...`);
                 const token = localStorage.getItem('token') || localStorage.getItem('authToken');
-                const response = await fetch('/api/chapters', {
+                const response = await fetch(`${API_BASE}/api/chapters`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await response.json();
@@ -27473,7 +27473,7 @@
                 try {
                     console.log('🗑️ Clearing ALL chapters from database...');
 
-                    const response = await fetch('/api/admin/chapters/clear-all', {
+                    const response = await fetch(`${API_BASE}/api/admin/chapters/clear-all`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
@@ -27957,7 +27957,7 @@
                 console.log('📊 Test Configuration:', currentTestConfig);
                 
                 // Save to database
-                const saveResponse = await fetch('/api/practice-tests', {
+                const saveResponse = await fetch(`${API_BASE}/api/practice-tests`, {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
@@ -28027,7 +28027,7 @@
                 }
                 
                 // Save to database
-                const saveResponse = await fetch('/api/practice-tests', {
+                const saveResponse = await fetch(`${API_BASE}/api/practice-tests`, {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
@@ -28061,7 +28061,7 @@
         // Load practice tests (display after mock tests)
         async function loadPracticeTests() {
             try {
-                const response = await fetch('/api/practice-tests');
+                const response = await fetch(`${API_BASE}/api/practice-tests`);
                 const data = await response.json();
                 
                 if (data.success && data.tests && data.tests.length > 0) {
@@ -29307,6 +29307,9 @@
                     currentUser = data.user;
                     currentRole = data.user.role;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    localStorage.setItem('authToken', data.token || `${data.user.role}-token`);
+                    localStorage.setItem('token', data.token || `${data.user.role}-token`);
+                    localStorage.setItem('userRole', data.user.role);
                     showNotification('Login successful! Welcome to your dashboard.', 'success');
                     showDashboard();
                 } else {
@@ -30888,7 +30891,7 @@
             const role = document.getElementById("role").value;
 
             try {
-                const res = await fetch("/api/auth/login", {
+                const res = await fetch(`${API_BASE}/api/auth/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username, password, role })
@@ -30897,8 +30900,10 @@
 
                 if (data.success) {
                     localStorage.setItem("token", data.token);
+                    localStorage.setItem("authToken", data.token);
                     localStorage.setItem("username", data.user.username);
                     localStorage.setItem("role", data.user.role);
+                    localStorage.setItem("userRole", data.user.role);
 
                     // Store current user for later use
                     localStorage.setItem('currentUser', JSON.stringify(data.user));
@@ -32671,7 +32676,7 @@
         // Check AI connection status
         async function checkAIConnection() {
             try {
-                const response = await fetch('/api/ai-status');
+                const response = await fetch(`${API_BASE}/api/ai-status`);
                 const data = await response.json();
 
                 if (!data.ai_configured) {
@@ -32687,7 +32692,7 @@
         async function listGeminiModels() {
             try {
                 console.log('🔍 Fetching available models...');
-                const response = await fetch('/api/list-models');
+                const response = await fetch(`${API_BASE}/api/list-models`);
 
                 console.log('📡 Response status:', response.status);
 
@@ -33081,7 +33086,7 @@
                     }
                 };
 
-                const response = await fetch('/api/questions', {
+                const response = await fetch(`${API_BASE}/api/questions`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
@@ -33115,7 +33120,7 @@
             try {
                 console.log('📚 Creating test chapter for Physics (will be shared between JEE and NEET)...');
 
-                const response = await fetch('/api/chapters', {
+                const response = await fetch(`${API_BASE}/api/chapters`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
@@ -33160,7 +33165,7 @@
                 try {
                     console.log('🗑️ Clearing ALL questions from database...');
 
-                    const response = await fetch('/api/admin/questions/clear-all', {
+                    const response = await fetch(`${API_BASE}/api/admin/questions/clear-all`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
@@ -33604,7 +33609,7 @@
             console.log('🔍 Checking admin user status...');
 
             try {
-                const response = await fetch('/api/debug/check-admin');
+                const response = await fetch(`${API_BASE}/api/debug/check-admin`);
                 const data = await response.json();
 
                 console.log('👥 Admin check result:', data);
@@ -33698,6 +33703,8 @@
                     currentUser = data.user;
                     localStorage.setItem('currentUser', JSON.stringify(data.user));
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('userRole', data.user.role);
 
                     // Show dashboard
                     setTimeout(() => {
@@ -34608,7 +34615,7 @@
             try {
                 console.log('🔍 Testing AI connection...');
 
-                const response = await fetch('/api/ai-status');
+                const response = await fetch(`${API_BASE}/api/ai-status`);
                 const data = await response.json();
 
                 console.log('🤖 AI Status:', data);
@@ -34706,7 +34713,7 @@
         // AI Configuration Functions
         async function checkAIStatus() {
             try {
-                const response = await fetch('/api/ai-status');
+                const response = await fetch(`${API_BASE}/api/ai-status`);
                 const data = await response.json();
 
                 const resultDiv = document.getElementById('aiStatusResult');
@@ -34772,7 +34779,7 @@
 
         async function debugGemini() {
             try {
-                const response = await fetch('/api/debug-gemini');
+                const response = await fetch(`${API_BASE}/api/debug-gemini`);
                 const data = await response.json();
 
                 const resultDiv = document.getElementById('aiStatusResult');
@@ -34851,7 +34858,7 @@
                 const body = {};
                 body[`${provider}Key`] = key;
 
-                const response = await fetch('/api/test-ai-keys', {
+                const response = await fetch(`${API_BASE}/api/test-ai-keys`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -34898,7 +34905,7 @@
             }
 
             try {
-                const response = await fetch('/api/test-ai-keys', {
+                const response = await fetch(`${API_BASE}/api/test-ai-keys`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -35582,7 +35589,7 @@
         // Extract questions from image using AI
         async function extractQuestionsFromImage(base64Image, fileName) {
             try {
-                const response = await fetch('/api/ai-guidance', {
+                const response = await fetch(`${API_BASE}/api/ai-guidance`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -35803,7 +35810,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
 
         // Save individual question to database
         async function saveQuestionToDatabase(question) {
-            const response = await fetch('/api/questions', {
+            const response = await fetch(`${API_BASE}/api/questions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36128,7 +36135,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
         // Extract questions from image using AI
         async function extractQuestionsFromImage(base64Image, fileName) {
             try {
-                const response = await fetch('/api/ai-guidance', {
+                const response = await fetch(`${API_BASE}/api/ai-guidance`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -36349,7 +36356,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
 
         // Save individual question to database
         async function saveQuestionToDatabase(question) {
-            const response = await fetch('/api/questions', {
+            const response = await fetch(`${API_BASE}/api/questions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36858,7 +36865,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
 
         // Save individual question to database
         async function saveQuestionToDatabase(question) {
-            const response = await fetch('/api/questions', {
+            const response = await fetch(`${API_BASE}/api/questions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37471,14 +37478,14 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
 
                 // Fetch real user data and stats
                 const [usersResponse, statsResponse] = await Promise.all([
-                    fetch('/api/admin/users', {
+                    fetch(`${API_BASE}/api/admin/users`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${authToken}`,
                             'Content-Type': 'application/json'
                         }
                     }),
-                    fetch('/api/admin/stats', {
+                    fetch(`${API_BASE}/api/admin/stats`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${authToken}`,
@@ -37597,14 +37604,14 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             try {
                 // Fetch real questions and stats
                 const [questionsResponse, statsResponse] = await Promise.all([
-                    fetch('/api/questions', {
+                    fetch(`${API_BASE}/api/questions`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
                             'Content-Type': 'application/json'
                         }
                     }),
-                    fetch('/api/admin/stats', {
+                    fetch(`${API_BASE}/api/admin/stats`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
@@ -37827,7 +37834,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             }
 
             try {
-                const response = await fetch('/api/auth/register', {
+                const response = await fetch(`${API_BASE}/api/auth/register`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -38018,7 +38025,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
 
             try {
                 console.log('📚 Loading real questions from database...');
-                const response = await fetch('/api/questions', {
+                const response = await fetch(`${API_BASE}/api/questions`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
@@ -38690,7 +38697,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
 
             try {
                 // Get all questions first
-                const response = await fetch('/api/questions', {
+                const response = await fetch(`${API_BASE}/api/questions`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
@@ -38877,7 +38884,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             console.log('📚 Loading all questions...');
 
             try {
-                const response = await fetch('/api/questions', {
+                const response = await fetch(`${API_BASE}/api/questions`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
@@ -39214,7 +39221,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
                 // Save to database via API
                 const token = localStorage.getItem('token');
                 
-                fetch('/api/mock-tests', {
+                fetch(`${API_BASE}/api/mock-tests`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -39498,7 +39505,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
                     </div>
                 `;
 
-                console.log('🌐 Fetching mock tests from /api/mock-tests...');
+                console.log('🌐 Fetching mock tests from ${API_BASE}/api/mock-tests...');
                 console.log('🌐 API URL:', `${API_BASE}/api/mock-tests`);
                 
                 fetch(`${API_BASE}/api/mock-tests`)
@@ -39641,7 +39648,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
                 }
                 
                 // Fetch all questions for this mock test
-                const questionsResponse = await fetch('/api/questions/by-ids', {
+                const questionsResponse = await fetch(`${API_BASE}/api/questions/by-ids`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ids: activeMockTest.questionIds })
@@ -40180,7 +40187,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             showNotification('📚 Loading questions and chapters...', 'info');
             
             // Load chapters first
-            fetch('/api/chapters', {
+            fetch(`${API_BASE}/api/chapters`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -40200,7 +40207,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
                 });
 
             // Load all questions from database
-            fetch('/api/questions', {
+            fetch(`${API_BASE}/api/questions`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -40382,7 +40389,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             const chapter = document.getElementById('selectorChapter').value;
 
             // Re-fetch questions with filters
-            let url = '/api/questions?';
+            let url = `${API_BASE}/api/questions?`;
             if (subject) url += `subject=${encodeURIComponent(subject)}&`;
             if (difficulty) url += `difficulty=${encodeURIComponent(difficulty)}&`;
             if (chapter) url += `chapter=${encodeURIComponent(chapter)}&`;
@@ -40444,7 +40451,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             }
 
             // Fetch question details to display
-            fetch('/api/questions/by-ids', {
+            fetch(`${API_BASE}/api/questions/by-ids`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ids: selectedQuestions })
@@ -40616,7 +40623,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             }
 
             try {
-                const response = await fetch('/api/admin/verify-password', {
+                const response = await fetch(`${API_BASE}/api/admin/verify-password`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -40838,7 +40845,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
                 console.log('📚 References:', questionData.question.references);
                 console.log('💡 Hints:', questionData.question.hints);
 
-                const response = await fetch('/api/questions', {
+                const response = await fetch(`${API_BASE}/api/questions`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -41609,7 +41616,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             try {
                 console.log(`📚 Adding new chapter: ${chapterName} for ${examType} - ${subject}`);
 
-                const response = await fetch('/api/chapters', {
+                const response = await fetch(`${API_BASE}/api/chapters`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('authToken') || 'admin-token'}`,
@@ -44089,7 +44096,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             
             container.innerHTML = '<div style="text-align:center; padding:4rem; color:#94a3b8;"><i class="fas fa-spinner fa-spin" style="font-size:3rem; margin-bottom:1rem;"></i><p style="font-size:1.1rem;">Loading questions...</p></div>';
 
-            fetch('/api/questions', {
+            fetch(`${API_BASE}/api/questions`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             .then(res => res.json())
@@ -46994,7 +47001,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/embedded-documents', {
+                const response = await fetch(`${API_BASE}/api/embedded-documents`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await response.json();
@@ -47158,7 +47165,7 @@ Format the response as a JSON array of question objects. Use proper LaTeX syntax
             
             try {
                 const token = localStorage.getItem('token');
-                const url = docId ? `${API_BASE}/api/embedded-documents/${docId}` : '/api/embedded-documents';
+                const url = docId ? `${API_BASE}/api/embedded-documents/${docId}` : `${API_BASE}/api/embedded-documents`;
                 const method = docId ? 'PUT' : 'POST';
                 
                 const response = await fetch(url, {
